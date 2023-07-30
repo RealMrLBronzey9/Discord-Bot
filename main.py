@@ -26,7 +26,7 @@ def load_json(file):
     return file_content
 
 message_replies = load_json("BotDataJsons\messagereplies.json")
-banned_members = load_json("BotDataJsons\bannedmembers.json")
+banned_members = load_json("BotDataJsons\\bannedmembers.json")
 
     
 # On Ready
@@ -53,13 +53,14 @@ async def on_message(message):
 # Member Filtering
 @bot.event
 async def on_member_join(member):
-    join_channel = bot.get_channel(1117997142334775369)
-    await join_channel.send(f'{member} has joined!!')
     for i in banned_members:
         if member.id == banned_members[i]:
             await member.kick()
             print(f'Kicked, {str(member.id)} also known as {member}')
             break
+    join_channel = bot.get_channel(1117997142334775369)
+    await join_channel.send(f'{member} has joined!!')
+    
 
 # Detect if someone left voicecall
 @bot.event
@@ -79,8 +80,8 @@ async def on_voice_state_update(member, before, after):
 async def reloadjson(ctx):
     global message_replies
     global banned_members
-    message_replies = load_json("DiscordBot\BotData\messagereplies.json")
-    banned_members = load_json("DiscordBot\BotData\\bannedmembers.json")
+    message_replies = load_json("BotDataJsons\messagereplies.json")
+    banned_members = load_json("BotDataJsons\\bannedmembers.json")
     await ctx.channel.send('Reloaded jsons!')
 
 # Append Banned Member
