@@ -31,7 +31,7 @@ def load_json(file):
     file_content = json.loads(file_data)
     return file_content
 
-message_replies = load_json("Discord-Bot/BotDataJsons/messagereplies.json")
+message_replies = load_json("BotDataJsons/messagereplies.json")
 
     
 # On Ready
@@ -78,7 +78,7 @@ async def on_voice_state_update(member, before, after):
 async def reloadjson(ctx):
     global message_replies
     global banned_members
-    message_replies = load_json("Discord-Bot/BotDataJsons/messagereplies.json")
+    message_replies = load_json("BotDataJsons/messagereplies.json")
     await ctx.channel.send('Reloaded jsons!')
 
 
@@ -95,7 +95,7 @@ async def youtube_remind(ctx):
     await ctx.channel.send("Youtube Reminder Started!!!")
     
     # Load the channel ID from the json file
-    with open("Discord-Bot/BotDataJsons/ytremind.json") as json_file:
+    with open("BotDataJsons/ytremind.json") as json_file:
         data = json.load(json_file)
     
     global youtubeRemindStatus
@@ -115,9 +115,10 @@ async def youtube_remind(ctx):
             else:
                 await sendMessage(1190413526888628325, "**ERROR: Can't get video, try again.**")
             
-            with open("Discord-Bot/BotDataJsons/ytremind.json", "w") as outfile:    # Save latest video id so if its same then no notification
+            with open("BotDataJsons/ytremind.json", "w") as outfile:    # Save latest video id so if its same then no notification
                 json.dump(data, outfile, indent=4)
-        await asyncio.sleep(15)
+        await asyncio.sleep(43200)
+        await ctx.channel.send("Youtube Reminder Checked All Channels!")
 
 # Stop Youtube Reminder
 @bot.command()
