@@ -92,7 +92,7 @@ async def sendMessage(channel_id, message):
 @bot.command()  
 async def youtube_remind(ctx):
     api_key = os.getenv('API_KEY')
-    ctx.channel.send("Youtube Reminder Started!!!")
+    await ctx.channel.send("Youtube Reminder Started!!!")
     
     # Load the channel ID from the json file
     with open("Discord-Bot/BotDataJsons/ytremind.json") as json_file:
@@ -102,28 +102,29 @@ async def youtube_remind(ctx):
     youtubeRemindStatus = True
     while youtubeRemindStatus:
         for i in range(len(data)):  # All users
-            for j in range(len(data[str(i)]["Channels"])) :  # All channels
-                channel_id = data[str(i)]["Channels"][str(j)]["id"]
-                video_title, video_url, video_id = await remind.check_youtube_channel(channel_id, api_key)
-                if video_title:
-                    if video_id == data[str(i)]["Channels"][str(j)]["latest"]:  # Don't notification repeats
-                        pass
-                    else:
-                        await sendMessage(1190413526888628325, f"**A new video has been uploaded!!:** {video_title}\n**Watch it here:** {video_url}")
-                        data[str(i)]["Channels"][str(j)]["latest"] = video_id
+            channel_id = data[str(i)]["id"]
+            channel_name = data[str(i)]["Name"]
+            video_title, video_url, video_id = await remind.check_youtube_channel(channel_id, api_key)
+            member =  ctx.guild.default_role
+            if video_title:
+                if video_id == data[str(i)]["latest"]:  # Don't notification repeats
+                    pass
                 else:
-                    await sendMessage(1190413526888628325, "**ERROR: Can't get video, try again.**")
+                    await sendMessage(1190413526888628325, f"**HEY {member.mention}!! A new video by {channel_name} has been uploaded!!:** {video_title}\n**Watch it here:** {video_url}")
+                    data[str(i)]["latest"] = video_id
+            else:
+                await sendMessage(1190413526888628325, "**ERROR: Can't get video, try again.**")
             
             with open("Discord-Bot/BotDataJsons/ytremind.json", "w") as outfile:    # Save latest video id so if its same then no notification
                 json.dump(data, outfile, indent=4)
-        await asyncio.sleep(5)
+        await asyncio.sleep(15)
 
 # Stop Youtube Reminder
 @bot.command()
 async def youtube_remind_stop(ctx):
     global youtubeRemindStatus
     youtubeRemindStatus = False
-    ctx.channel.send("Youtube Reminder Stopped!!!")
+    await ctx.channel.send("Youtube Reminder Stopped!!!")
     
 
 bot.run(TOKEN)
