@@ -117,8 +117,7 @@ async def youtube_remind(ctx):
             
             with open("BotDataJsons/ytremind.json", "w") as outfile:    # Save latest video id so if its same then no notification
                 json.dump(data, outfile, indent=4)
-        await asyncio.sleep(43200)
-        await ctx.channel.send("Youtube Reminder Checked All Channels!")
+        await asyncio.sleep(21600)  # Check every 6 hours
 
 # Stop Youtube Reminder
 @bot.command()

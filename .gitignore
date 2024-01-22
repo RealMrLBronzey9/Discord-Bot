@@ -1,3 +1,4 @@
 .env
 BotDataJsons
 modules/__pycache__
+.vscode
